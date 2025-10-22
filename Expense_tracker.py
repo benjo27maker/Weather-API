@@ -89,7 +89,7 @@ def add_expense(expense,amount,category=None,date=None):
         
 
 
-     expenses.append({'Expense':expense,'Amount':f'\£{amount:.2f}','ID':ID,'Date':f'{date_list}/{datetime.now().year}','Category':category})
+     expenses.append({'Expense':expense,'Amount':f'£{amount:.2f}','ID':ID,'Date':f'{date_list}/{datetime.now().year}','Category':category})
     
 
     
@@ -202,6 +202,8 @@ def del_expense(ID=None,category=None,date=None):
             
 
 def del_all():
+
+
     for i in expenses[:]:
         expenses.remove(i)
     
@@ -218,21 +220,39 @@ def del_all():
 
 
         
-        
+def del_category(category):
+
+    if category=='misc':
+        print('misc category cannot be deleted because it is the default category')
+        return
+
+    if category not in categories:
+        print(f'{category} is not in categories please enter a valid category')
+        return
+
+    expense_counter_3=0
+    for i in expenses:
+        if i.get('Category')==category:
+            expense_counter_3+=1
+    if expense_counter_3!=0:
+        print(f'{category} category cannot be deleted because there are still {expense_counter_3} expenses in {category}')
+        return
+    else:
+        for i in categories:
+            if i==category:
+                categories.remove(i)
+                print(f'{category} has been removied from categories list')
+                break
             
-
-
-            
-
-
-
-        
+        with open('categories.csv', 'w', newline='') as file:
+             writer = csv.writer(file)
+             writer.writerow(categories)
     
-
-        
             
     
 def add_category(category):
+
+
     if (category in categories):
         print(f'{category} is already a category')
         return
@@ -242,4 +262,12 @@ def add_category(category):
     with open('categories.csv','w',newline='')as file:
         writer = csv.writer(file)
         writer.writerow(categories)
+
+
+def list_expenses(expense=None,category=None,date=None):
+    
+
+    if expense==None and category==None and date==None:
+        for i in expenses:
+            print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
 
