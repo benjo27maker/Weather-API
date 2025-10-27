@@ -265,9 +265,139 @@ def add_category(category):
 
 
 def list_expenses(expense=None,category=None,date=None):
+
+
+    if date!=None:
+        date_list=str(date)
+
+     
+        if len(date_list)==5:
+            date_list=date_list
+        elif len(date_list)==4 and date_list[2]=='/':
+            date_list=[date_list[0:3],0,date_list[3]]
+            date_list=("".join(map(str, date_list)))
+        elif len(date_list)==4 and date_list[1]=='/':
+            date_list=[0,date_list[0],date_list[1:4]]
+            date_list=("".join(map(str, date_list)))
+        elif len(date_list)==3:
+            date_list=[0,date_list[0],date_list[1],0,date_list[2]]
+            date_list=("".join(map(str, date_list)))
+        
+        try:
+            check1,check2=int(date_list[0:2]),int(date_list[3:5])
+        except ValueError:
+            print(f'{date} is not a valid date give the date in the form of dd/mm')
+            return
+         
+    
+        if int(date_list[0:2])>31 or int(date_list[3:5])>12 or int(date_list[3:5])<0 or int(date_list[0:2])<0:
+            print(f'{date} is not a valid date give the date in the form of dd/mm')
+            return
     
 
     if expense==None and category==None and date==None:
+        counter=0
         for i in expenses:
             print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
+            counter+=1
 
+        if counter==0:
+            print('there are no expenses add expenses to see them here')
+            return
+        else:
+            return
+
+    
+
+    if expense!=None and category==None and date==None:
+        counter=0
+        for i in expenses:
+            if i.get('Expense')==expense:
+                print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
+                counter+=1
+        if counter==0:
+            print(f'{expense} does not appear in expenses')
+            return
+        else:
+            return
+           
+
+    if expense==None and category!=None and date==None:
+        counter=0    
+        for i in expenses:
+            if i.get('Category')==category:
+                print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
+                counter+=1
+        if counter==0:
+            print(f'there are no expenses in {category}')
+            return
+        else:
+            return
+        
+
+        
+
+
+
+    if expense==None and category==None and date!=None:  
+        counter=0
+        for i in expenses:
+            if i.get('Date')==date:
+                print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
+                counter+=1
+        if counter==0:
+            print(f'there are no expenses recorded for {date}')
+            return
+        else:
+            return
+    
+
+    if expense==None and category!=None and date!=None:
+        counter=0
+        for i in expenses:
+             if i.get('Date')==date and i.get('Category')==category:
+                 print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
+                 counter+=1
+        if counter==0:
+            print(f'there are no expenses recorded for in {category} on {date}')
+            return
+        else:
+            return
+    
+        
+
+
+    if expense!=None and category==None and date!=None:
+        counter=0
+        for i in expenses:
+             if i.get('Date')==date and i.get('Expense')==expense:
+                 print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
+                 counter+=1
+        if counter==0:
+            print(f'{expenses} does not appear on expenses on {date}')
+            return
+        else:
+            return
+
+
+
+def list_by_ID(ID):
+    try:
+        int(ID)
+    except ValueError:
+        print(f'{ID} is not a valid ID please enter an interger number e.g {random.uniform(0,20):.0f}')
+        return
+    counter=0
+    for i in expenses:
+
+        if i.get('ID')==ID:
+            print(i['Amount'],i['Expense'],i['Category'],i['Date'],'ID =',i['ID'])
+            counter+=1
+    if counter==0:
+        print(f'there are no expenses with ID: {ID}')
+        return
+    else:
+        return
+
+
+list_by_ID('pooo')
