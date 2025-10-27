@@ -400,4 +400,27 @@ def list_by_ID(ID):
         return
 
 
-list_by_ID('pooo')
+def update_expense(ID,update):
+
+
+
+
+
+    if type(ID)!=int:
+        print(f'{ID} is not an accepted ID type please enter an interger e.g: {random.uniform(0,100):.0f}')
+        return
+
+
+
+    for i in expenses:
+        if i.get('ID')==ID:
+            old_expense=i['Expense']
+            i['Expense']=update
+            print(f'{old_expense} has been updated to {update}')
+            with open('expenses.json','w') as file:
+                json.dump(expenses,file,indent=4)
+            return
+    
+    print(f'expense with ID: {ID} does not appear in expenses list')
+
+
