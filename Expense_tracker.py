@@ -27,6 +27,15 @@ if os.path.exists('categories.csv'):
 else:
     categories=['misc']
 
+if os.path.exists('budgets.json'):
+    with open('budgets.json','r') as file:
+        try:
+            budgets=json.load(file)
+        except json.JSONDecodeError:
+            budgets=[]
+else:
+    budgets=[]
+
 
             
 
@@ -216,8 +225,6 @@ def del_all():
 
     return
         
-
-
 
         
 def del_category(category):
@@ -422,5 +429,154 @@ def update_expense(ID,update):
             return
     
     print(f'expense with ID: {ID} does not appear in expenses list')
+
+
+def add_budget(amount,date):
+
+    budget_date_list=str(date)
+
+
+    if len(budget_date_list)==5:
+        budget_date_list=budget_date_list
+    elif len(budget_date_list)==4 and budget_date_list[1]=='/':
+         budget_date_list=[0,budget_date_list[0],budget_date_list[1:4]]
+         budget_date_list=("".join(map(str, budget_date_list)))
+
+
+    try:
+        check_budget_1,check_budget_2=int(budget_date_list[0:2]),int(budget_date_list[3:5])
+    except ValueError:
+         print(f'{date} is not a valid date give the date in the form of mm/yy')
+         return
+         
+    
+    if int(budget_date_list[0:2])>12 or int(budget_date_list[3:5])<0 or int(budget_date_list[0:2])<0:
+         print(f'{date} is not a valid date give the date in the form of mm/yy')
+         return
+    
+    for i in budgets:
+        if i.get('Date')==budget_date_list:
+            print(f'there is already a budget of {i['Budget']} set for {budget_date_list} to set a new budget update or delete the current budget')
+            return
+
+
+    
+
+    try:
+        int(amount)
+    except ValueError:
+        print(f'{amount} is not a valid budget please enter an amount in ponds eg: £{random.uniform(0,100):.2f}')
+        return
+    amount=f'£{amount}'
+
+    if int(amount[1:])<0:
+        print(f'please enter a positive budget eg: £{random.uniform(0,100):.2f}')
+        return
+
+
+
+    
+
+
+    budgets.append({'Budget':amount,'Date':budget_date_list})
+    with open('budgets.json','w') as file:
+        json.dump(budgets,file,indent=4)
+
+    print(f'a budget of {amount} has been added for {budget_date_list}')
+
+def del_budget(date):
+
+
+    budget_date_list=str(date)
+
+
+    if len(budget_date_list)==5:
+        budget_date_list=budget_date_list
+    elif len(budget_date_list)==4 and budget_date_list[1]=='/':
+         budget_date_list=[0,budget_date_list[0],budget_date_list[1:4]]
+         budget_date_list=("".join(map(str, budget_date_list)))
+
+
+    try:
+        check_budget_1,check_budget_2=int(budget_date_list[0:2]),int(budget_date_list[3:5])
+    except ValueError:
+         print(f'{date} is not a valid date give the date in the form of mm/yy')
+         return
+         
+    
+    if int(budget_date_list[0:2])>12 or int(budget_date_list[3:5])<0 or int(budget_date_list[0:2])<0:
+         print(f'{date} is not a valid date give the date in the form of mm/yy')
+         return
+    
+    for i in budgets:
+        if i.get('Date')==budget_date_list:
+            budgets.remove(i)
+            with open('budgets.json','w') as file:
+                json.dump(budgets,file,indent=4)
+            
+            print(f'budget for {budget_date_list} has been deleted')
+            return
+        
+    print(f'there is no budget currently set for {budget_date_list}')
+
+def update_budget(update,date):
+
+    if len(budgets)==0:
+        print('there are no budgets currently in place add a budget first to update it')
+        return
+
+
+
+    budget_date_list=str(date)
+
+
+    if len(budget_date_list)==5:
+        budget_date_list=budget_date_list
+    elif len(budget_date_list)==4 and budget_date_list[1]=='/':
+         budget_date_list=[0,budget_date_list[0],budget_date_list[1:4]]
+         budget_date_list=("".join(map(str, budget_date_list)))
+
+
+    try:
+        check_budget_1,check_budget_2=int(budget_date_list[0:2]),int(budget_date_list[3:5])
+    except ValueError:
+         print(f'{date} is not a valid date give the date in the form of mm/yy')
+         return
+         
+    
+    if int(budget_date_list[0:2])>12 or int(budget_date_list[3:5])<0 or int(budget_date_list[0:2])<0:
+         print(f'{date} is not a valid date give the date in the form of mm/yy')
+         return
+    
+
+    try:
+        int(update)
+    except ValueError:
+        print(f'{update} is not a valid budget please enter an amount in ponds eg: £{random.uniform(0,100):.2f}')
+        return
+    update=f'£{update}'
+
+    if int(update[1:])<0:
+        print(f'please enter a positive budget eg: £{random.uniform(0,100):.2f}')
+        return
+    
+    
+    for i in budgets:
+        if i.get('Date')==budget_date_list:
+            if i['Budget']==update:
+                print(f'the budget for {budget_date_list} ia already {update}')
+                return
+            i['Budget']=update
+
+            with open('budgets.json','w') as file:
+                json.dump(budgets,file,indent=4)
+            print(f'the budget for {budget_date_list} has been updated to {update}')
+            return
+
+    print(f'there is no budget currently set for {budget_date_list}')
+    return
+
+
+    
 
 
