@@ -100,12 +100,34 @@ def add_expense(expense,amount,category=None,date=None):
 
      expenses.append({'Expense':expense,'Amount':f'£{amount:.2f}','ID':ID,'Date':f'{date_list}/{datetime.now().year}','Category':category})
     
+     budget_date=[date_list[3:5],'/',str(datetime.now().year)[-2:]]
+     budget_date=("".join(map(str,budget_date)))
 
-    
+     budget_counter=0
+     for i in budgets:
+         if i.get('Date')==budget_date:
+             budget_counter+=1
+             remain_arr=['£', round(float(i['Remaining'][1:]) - float(amount), 2)]
+             (i['Remaining'])=("".join(map(str,remain_arr)))
+             if remain_arr[1]<0:
+                 print(f'{expense} has been added to expenses the budget of {i['Budget']} for {i["Date"]} has now been exceeded by £{abs(remain_arr[1])}')
+                 return
+             print(f"{expense} has been added to expenses the remaining budget for {budget_date} is now {i['Remaining']}")
+     if budget_counter==0:
+         print(f'{expense} has been added to expenses there is no budget currently set for {budget_date}')
+
+
+
+     
+     
 
 
      with open('expenses.json','w') as file:
         json.dump(expenses,file,indent=4)
+
+
+     with open('budgets.json','w') as file:
+        json.dump(budgets,file,indent=4)
      
 
 
@@ -478,7 +500,7 @@ def add_budget(amount,date):
     
 
 
-    budgets.append({'Budget':amount,'Date':budget_date_list})
+    budgets.append({'Date':budget_date_list,'Budget':amount,'Remaining':amount})
     with open('budgets.json','w') as file:
         json.dump(budgets,file,indent=4)
 
@@ -520,6 +542,8 @@ def del_budget(date):
     print(f'there is no budget currently set for {budget_date_list}')
 
 def update_budget(update,date):
+
+
 
     if len(budgets)==0:
         print('there are no budgets currently in place add a budget first to update it')
@@ -575,8 +599,4 @@ def update_budget(update,date):
 
     print(f'there is no budget currently set for {budget_date_list}')
     return
-
-
-    
-
 
