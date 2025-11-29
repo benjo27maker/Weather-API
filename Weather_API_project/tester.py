@@ -1,16 +1,17 @@
 from flask import request
+import requests
 import os
 from flask import Flask
-from flask_limiter import Limiter
-import redis
-from flask_limiter.util import get_remote_address
+from flask import jsonify
 import requests
 from dotenv import load_dotenv
 import os
+from flask_limiter import Limiter
 import redis
-import logging
+from flask_limiter.util import get_remote_address
 import json
-load_dotenv()
+import logging
+
 
 load_dotenv()
 
@@ -40,12 +41,9 @@ limiter = Limiter(
 )
 
 
-@app.get("/location")
-def weather_route():
-    city = request.args.get("city", "Edinburgh")  # default if no city
-    return get_weather(city)
 
-def get_weather(location):
+
+def get_weather():
     filter_end='2025-01-29'
     filter_start='2025-01-28'
     location='Edinburgh'
@@ -102,9 +100,5 @@ def get_weather(location):
 
 
 
-
-
-
-if __name__=="__main__":
-    app.run(debug=True)
+get_weather()
 
