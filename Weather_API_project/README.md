@@ -3,7 +3,7 @@
 
 https://github.com/benjo27maker/Weather_API_project
 
-https://roadmap.sh/projects/weather-API
+https://roadmap.sh/projects/weather-api-wrapper-service
 
 
 This project is a weather API written in Python with an integrated redis caches-system runnin using a flask server and features a flask limiting function. It allows users to
