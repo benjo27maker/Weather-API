@@ -57,7 +57,9 @@ def weather_route():
     if filter_end:
         filter_end = "/" + filter_end
     else:
-        filter_end = ""
+        filter_end = "" 
+        
+
     return get_weather(city,filter_start,filter_end)
 
 
